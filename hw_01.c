@@ -1,60 +1,47 @@
 #include <stdio.h>
 #include <stdlib.h>
+// https://www.geeksforgeeks.org/insertion-sort/
+// https://stackoverflow.com/questions/4774456/pass-an-array-to-a-function-by-value
 
 void op_1(int* arr, int pos, int val){
     arr[pos-1] = val;
 }
 
-void op_2(int* arr, int pos, int arrLen) {
-    int* sortedArr = malloc(arrLen * sizeof(int));
-    memcpy(sortedArr, arr, arrLen * sizeof(int));
-    int index = pos - 1;
+void op_2(int* arr, int pos, int arrLen){
+    int count = 0;
+    int value = arr[pos - 1];
 
-    for (int i = 1; i < arrLen; i++) {
-        for (int j = i; j > 0 && sortedArr[j] < sortedArr[j - 1]; j--) {
-            if (j == index) {
-                index--;
-                sortedArr[j] = sortedArr[j - 1] + sortedArr[j];
-                sortedArr[j - 1] = sortedArr[j] - sortedArr[j - 1];
-                sortedArr[j] = sortedArr[j] - sortedArr[j - 1];
-            }
-            else if (index == j - 1) {
-                index++;
-                sortedArr[j - 1] = sortedArr[j] + sortedArr[j - 1];
-                sortedArr[j] = sortedArr[j - 1] - sortedArr[j];
-                sortedArr[j - 1] = sortedArr[j - 1] - sortedArr[j];
-            }
-            else {
-                sortedArr[j - 1] = sortedArr[j - 1] + sortedArr[j];
-                sortedArr[j] = sortedArr[j - 1] - sortedArr[j];
-                sortedArr[j - 1] = sortedArr[j - 1] - sortedArr[j];
-            }
-        }
+    for (int i=0;i<arrLen;i++) {
+        if (arr[i] < value || (arr[i] == value && i < pos - 1))
+            count++;
     }
-    printf("%d\n", index + 1);
-    free(sortedArr);
+
+    printf("%d\n", count + 1);
 }
+
 
 
 int main(){
     int n, Q;
-    int op, pos, val;   // pos uses twice
+    int op, pos, val;
     scanf("%d %d",&n,&Q);
+
     int* arr = (int*)malloc(sizeof(int) * n);
     for (int i=0;i<n;i++) scanf("%d",&arr[i]);
-    
 
-    // start doing operation
-    for (int i=0;i<Q;i++){
+    for (int i=0;i<Q;i++) {
         scanf("%d", &op);
-        if (op == 1){
+        if (op == 1) {
             scanf("%d %d",&pos, &val);
             op_1(arr, pos, val);
         }
+
         else{
             scanf("%d", &pos);
             op_2(arr, pos, n);
         }
     }
+
+    free(arr);
     return 0;
 }

@@ -1,2 +1,4 @@
 /a.exe
+*.out
 /out.txt
+a.*
