@@ -1,5 +1,5 @@
 /*
-    Probelm 466 Insertion Sort
+    Probelm 466 - Insertion Sort
     O(n)
     https://www.geeksforgeeks.org/insertion-sort/
     https://stackoverflow.com/questions/4774456/pass-an-array-to-a-function-by-value

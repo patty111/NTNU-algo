@@ -1,8 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
-#include <limits.h>
-#include <string.h>
+#include <stdint.h>
+
 int* upper_tangent(int polygon1[][2], int polygon2[][2], int len1, int len2){
     // int low[4] = {INT32_MAX, INT32_MAX, INT32_MAX, INT32_MAX};
     int* upper = (int*)malloc(sizeof(int) * 4);
