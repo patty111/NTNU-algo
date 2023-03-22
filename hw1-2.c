@@ -1,3 +1,9 @@
+/*
+    Problem 467 Exploration Progress
+    hint: store only the difference between adjacent elements in array
+    e.g. [2, 4, 3] -> [0, 2, -1]
+*/
+
 #include <stdio.h>
 #include <stdbool.h>
 #include <stdlib.h>
