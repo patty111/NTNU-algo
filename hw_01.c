@@ -1,7 +1,12 @@
+/*
+    Probelm 466 Insertion Sort
+    O(n)
+    https://www.geeksforgeeks.org/insertion-sort/
+    https://stackoverflow.com/questions/4774456/pass-an-array-to-a-function-by-value
+*/
+
 #include <stdio.h>
 #include <stdlib.h>
-// https://www.geeksforgeeks.org/insertion-sort/
-// https://stackoverflow.com/questions/4774456/pass-an-array-to-a-function-by-value
 
 void op_1(int* arr, int pos, int val){
     arr[pos-1] = val;
