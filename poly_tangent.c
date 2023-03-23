@@ -4,9 +4,9 @@
 #include <stdint.h>
 
 int* upper_tangent(int polygon1[][2], int polygon2[][2], int len1, int len2){
-    // int low[4] = {INT32_MAX, INT32_MAX, INT32_MAX, INT32_MAX};
     int* upper = (int*)malloc(sizeof(int) * 4);
-    for (int i=0;i<4;i++) upper[i] = INT32_MIN;
+    for (int i=0;i<4;i++)
+        upper[i] = INT32_MIN;
     
     for (int i=0;i<len1;i++){
         if (polygon1[i][1] >= upper[1]){
@@ -27,7 +27,8 @@ int* upper_tangent(int polygon1[][2], int polygon2[][2], int len1, int len2){
 
 int* lower_tangent(int polygon1[][2], int polygon2[][2], int len1, int len2){
     int* lower = (int*)malloc(sizeof(int) * 4);
-    for (int i=0;i<4;i++) lower[i] = INT32_MAX;
+    for (int i=0;i<4;i++)
+        lower[i] = INT32_MAX;
     
     for (int i=0;i<len1;i++){
         if (polygon1[i][1] <= lower[1]){
