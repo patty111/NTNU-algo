@@ -36,7 +36,6 @@ double polygonArea(vertice* points, int n){
         b = points[i].x;
         b *= points[i-1].y;
         area += (a - b);
-        printf("%lf\n", area);
         // area += points[i-1].x * points[i].y - points[i].x * points[i-1].y;
     }
     return fabs(area/2);
