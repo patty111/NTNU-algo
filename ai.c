@@ -1,68 +1,109 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdbool.h>
 
-typedef struct {
-    int x;
-    int y;
-} vertice;
+void print2D(int** arr, int n){
+    for (int i=0;i<n;i++){
+        for (int j=0;j<n;j++){
+            printf("%d ", arr[j][i]);
+        }
+        printf("\n");
+    }   
+}
 
-int compare(const void* a, const void* b) {
-    vertice* p1 = (vertice*)a;
-    vertice* p2 = (vertice*)b;
-    int o = (p2->y - ((vertice*)a)[0].y) * (p1->x - p2->x) - (p2->x - ((vertice*)a)[0].x) * (p1->y - p2->y);
-    if (o == 0) {
-        int dist1 = p1->x * p1->x + p1->y * p1->y;
-        int dist2 = p2->x * p2->x + p2->y * p2->y;
-        return (dist1 > dist2) ? 1 : -1;
+void fill_plate(int** plate, int num_black_blocks, int** black_blocks, int start_row, int start_col, int size, int* val) {
+    int blackx, blacky;
+    bool has_black = false;
+    if (size == 2) {
+        for (int i=0;i<2;i++){
+            for (int j=0;j<2;j++){
+                if (plate[start_row+i][start_col+j] == -1){
+                    // plate[start_row+i][start_col+j] = 0;
+                    blackx = start_row+i;
+                    blacky = start_col+j;
+                    has_black = true;
+                }
+                else if (plate[start_row+i][start_col+j] == 0)
+                    plate[start_row+i][start_col+j] = *val;
+            }
+        }
+        *val += 1;
+
+
+//         if (blackx != 0 && blacky != 0 && has_black && num_black_blocks == 1){
+//             if (plate[blackx+1][blacky] == 0)
+//                 plate[blackx+1][blacky] = *val;
+
+//             if (plate[blackx-1][blacky] == 0)
+//                 plate[blackx-1][blacky] = *val;
+
+//             if (plate[blackx][blacky+1] == 0)
+//                 plate[blackx][blacky+1] = *val;
+
+//             if (plate[blackx][blacky-1] == 0)
+//                 plate[blackx][blacky-1] = *val; 
+
+// /////////////////////////////// diagonal
+//             if (plate[blackx-1][blacky-1] != 0)
+//                 plate[blackx+1][blacky+1] = *val;
+//             else if (plate[blackx+1][blacky+1] != 0)
+//                 plate[blackx-1][blacky-1] = *val;
+
+//             if (plate[blackx-1][blacky+1] != 0)
+//                 plate[blackx+1][blacky-1] = *val;
+//             else if (plate[blackx+1][blacky-1] != 0)
+//                 plate[blackx-1][blacky+1] = *val;
+
+
+//             *val += 1;
+//         }
+
+    print2D(plate, 4);
+        printf("%d %d\n", blackx, blacky);
+        return;
     }
-    return (o > 0) ? 1 : -1;
-}
-
-
-
-
-
-
-
-void swap(vertice* a, vertice* b) {
-    vertice temp = *a;
-    *a = *b;
-    *b = temp;
-}
-
-int orientation(vertice p, vertice q, vertice r) {
-    int val = (q.y - p.y) * (r.x - q.x) - (q.x - p.x) * (r.y - q.y);
-    if (val == 0) return 0;
-    return (val > 0) ? 1 : 2;
-}
-
-void convexHull(vertice* points, int n) {
-    int i, j, k = 0;
-    vertice* hull = (vertice*)malloc(sizeof(vertice) * n);
-    for (i = 1; i < n; i++)
-        if (points[i].y < points[k].y || (points[i].y == points[k].y && points[i].x < points[k].x))
-            k = i;
-    swap(&points[0], &points[k]);
-    qsort(&points[1], n - 1, sizeof(vertice), compare);
-    hull[0] = points[0];
-    hull[1] = points[1];
-    int top = 1;
-    for (i = 2; i < n; i++) {
-        while (top > 0 && orientation(hull[top - 1], hull[top], points[i]) != 2)
-            top--;
-        hull[++top] = points[i];
-    }
-    for (i = 0; i <= top; i++)
-        printf("(%d, %d) ", hull[i].x, hull[i].y);
-    printf("\n");
+    
+    int half_size = size / 2;
+    fill_plate(plate, num_black_blocks, black_blocks, start_row, start_col, half_size, val);
+    fill_plate(plate, num_black_blocks, black_blocks, start_row, start_col+half_size, half_size, val);
+    fill_plate(plate, num_black_blocks, black_blocks, start_row+half_size, start_col, half_size,val);
+    fill_plate(plate, num_black_blocks, black_blocks, start_row+half_size, start_col+half_size, half_size, val);
 }
 
 int main() {
-    int n, i;
-    scanf("%d", &n);
-    vertice points[n];
-    for (i = 0; i < n; i++)
-        scanf("%d %d", &points[i].x, &points[i].y);
-    convexHull(points, n);
+    int N, L;
+    scanf("%d %d",&N , &L);
+    
+    int** table = (int**)malloc(sizeof(int*) * L);
+    for (int i=0;i<L;i++)
+        table[i] = (int*)calloc(L, sizeof(int));
+
+    // black blocks seem no use
+    int** black_blocks = (int**)malloc(sizeof(int*) * N);
+    for (int i=0;i<N;i++)
+        black_blocks[i] = (int*)malloc(sizeof(int) * 2);
+    
+
+
+    for (int i = 0; i < N; i++) {
+        int x,y;
+        scanf("%d %d",&x, &y);
+        black_blocks[i][0] = x;
+        black_blocks[i][1] = y;
+        table[x][y] = -1;   
+    }
+
+    // val for filling the table
+    int val = 1;
+    int* ptrval = &val;
+    // print2D(table, L);
+    // printf("-------------------------------\n");
+    fill_plate(table, N, black_blocks, 0, 0, L, ptrval);
+    for (int i=0;i<N;i++){
+        table[black_blocks[i][0]][black_blocks[i][1]] = 0;
+    }
+    print2D(table, L);
+
     return 0;
 }
+
