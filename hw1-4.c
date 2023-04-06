@@ -80,9 +80,9 @@ vertice* brute_hull(vertice* points, int n, int* hull_size){
 
 
 
-void* devide(vertice* V, int len, vertice* stack, int* top){
-
-}
+// void* devide(vertice* V, int len, vertice* stack, int* top){
+    // return;
+// }
 
 
 
