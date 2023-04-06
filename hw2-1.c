@@ -1,24 +1,30 @@
 #include <stdio.h>
-#include <stdlib.h>
-#include <stdbool.h>
-#include <limits.h>
 #include <math.h>
-int main(){
-    int n;
-    scanf("%d", &n);
-    int* dp = (int*)malloc(sizeof(int) * n);
+#include <stdlib.h>
 
+#ifdef PROFILER_H
+#include "profiler.h"
+#endif // !PROFILER_H
+
+
+#define module 1000000007
+
+int main(){
+    int N;
+    scanf("%d", &N);
+
+    int* dp = (int*)calloc(N+1, sizeof(int));
     dp[0] = 1;
-    for (int i=0;i<log2(n);i++){
-        int bills = pow(2, i);
-        for (int j=bills; j<=n; j++)
-            dp[j] = dp[j-bills];
+
+    int coin = 1;
+    for (int i = 0; i <= 31; i++) {
+        for (int j = coin; j <= N; j++)
+            dp[j] = (dp[j] + dp[j - coin]) % module;
+        
+        coin = (coin << 1) % module;
     }
 
-    printf("%d\n", dp[n]);
-
-
-
-
-    return 0;	
+    printf("%d\n", dp[N]);
+    free(dp);
+    return 0;
 }
