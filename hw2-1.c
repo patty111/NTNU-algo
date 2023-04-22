@@ -2,11 +2,6 @@
 #include <math.h>
 #include <stdlib.h>
 
-#ifdef PROFILER_H
-#include "profiler.h"
-#endif // !PROFILER_H
-
-
 #define module 1000000007
 
 int main(){
