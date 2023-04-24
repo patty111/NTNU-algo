@@ -19,9 +19,9 @@ int cmp_func(const void* a, const void* b){
     seg tmpA = *(seg*)a;
     seg tmpB = *(seg*)b;
     if (tmpA.start != tmpB.start)
-        return tmpA.start - tmpB.start;
+        return tmpA.end - tmpB.end;
     else
-        return  tmpA.end - tmpB.end;
+        return tmpA.start - tmpB.start;
 }
 
 // merge and return merged segment time. if op = 1 -> merge, if op = 0 -> don't merge, only count merged segment time
@@ -49,7 +49,9 @@ int main(){
     }
 
     qsort(seg_arr, n, sizeof(seg), cmp_func);
-    
+    for (int i=0;i<n;i++)
+        printf("%d %d\n", seg_arr[i].start, seg_arr[i].end);
+
     // initialize dp table
 
     // 排除第一個是 start == end的狀況 e.g. 0 0 or 1 1 or 2 2...
@@ -91,6 +93,7 @@ int main(){
         bias = 0;
         merge(seg_arr[i], m_seg);
     }
+
 
     printf("%d %d\n",dp[AUD_LEN] , AUD_LEN - m_seg->time);
     return 0;
