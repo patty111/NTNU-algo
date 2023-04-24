@@ -6,7 +6,6 @@ Problem #484 - Speaker Diarization
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <stdbool.h>
 
 typedef struct segment{
     int start;
@@ -50,7 +49,6 @@ int main(){
 
     qsort(seg_arr, n, sizeof(seg), cmp_func);
     
-    // initialize dp table
 
     // 排除第一個是 start == end的狀況 e.g. 0 0 or 1 1 or 2 2...
     int start_idx = 0;
@@ -61,6 +59,7 @@ int main(){
             break;
     }
     
+    // initializing dp table
     int* dp = (int*)calloc((AUD_LEN + 1), sizeof(int));    
         // 注意範圍，domain 有包含還是無包含。 這邊是start無包含end有包含!!所以for loop 要用 <=
     for (int i=seg_arr[start_idx].start + 1;i<=AUD_LEN;i++)

@@ -6,6 +6,8 @@ Problem #483 - Flight Planning
 
 #include <stdio.h>
 #include <stdlib.h>
+// Maximum Cardinality Bipartite Matching problem
+// Hopcroft-Karp algorithm
 
 typedef struct F{
     int start, end;
@@ -58,7 +60,7 @@ int cmpfunc(const void* a, const void* b){
 int main(){
     int n, m, f;
     scanf("%d %d %d", &n, &m, &f);
-    flight* flights = (flight*)malloc(sizeof(flight) * f);
+    flight* flights = (flight*)malloc(sizeof(flight) * n);
 
     for (int i=0;i<f;i++){
         scanf("%d %d", &flights[i].start, &flights[i].end);
@@ -66,11 +68,10 @@ int main(){
 
     qsort(flights, f, sizeof(flight), cmpfunc);
     
+    for (int i=0;i<f;i++){
+        printf("%d %d\n", flights[i].start, flights[i].end);
+    }
 
-    // for (int i=0;i<f;i++){
-    //     printf("%d %d\n", flights[i].start, flights[i].end);
-    // }
-    printf("%d\n", LIS(flights, f));
 
 
 
