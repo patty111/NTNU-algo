@@ -2,6 +2,15 @@
 #include <stdlib.h>
 #include <time.h>
 
+void shuffle(int *arr, int n) {
+    for (int idx = 0; idx < n; idx++) {
+        int s = rand() % n;
+        int tmp = arr[idx];
+        arr[idx] = arr[s];
+        arr[s] = tmp;
+    }
+}
+
 int main() {
     int n = 500000;
     int *arr = (int *)malloc(n * sizeof(int));

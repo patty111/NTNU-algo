@@ -1,3 +1,10 @@
+/*
+generates big test cases for hw2-4.cpp
+#1 gcc shuffle.c -o shf
+#2 ./shf > shf.in
+#3 {my_program_name} < shf.in
+*/
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>

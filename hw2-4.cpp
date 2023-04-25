@@ -1,6 +1,8 @@
 #include <iostream>
 #include <algorithm>
 #include <vector>
+// using c++ is faster
+// run *.exe < shf.in on mac to test big cases
 
 using namespace std;
 
@@ -39,52 +41,56 @@ int main() {
 
     vector<Segment> seg_arr(n);
 
+    int count = 0;
     for (int i = 0; i < n; i++) {
-        cin >> seg_arr[i].start >> seg_arr[i].end;
-        seg_arr[i].time = seg_arr[i].end - seg_arr[i].start;
-    }
-
-    sort(seg_arr.begin(), seg_arr.end(), cmp_func);
-
-    // 排除第一個是 start == end的狀況 e.g. 0 0 or 1 1 or 2 2...
-    int start_idx = 0;
-    for (int i = 0; i < n; i++) {
-        if (seg_arr[i].time == 0 && n != 1)
-            start_idx++;
-        else
-            break;
+        int a, b;
+        cin >> a >> b;
+        if ( a == b)
+            continue;
+        else{
+            seg_arr[i].start = a;
+            seg_arr[i].end = b;
+            seg_arr[i].time = seg_arr[i].end - seg_arr[i].start;
+            count++;
+        }
     }
 
     // initializing dp table
-    vector<int> dp(AUD_LEN + 10);
 
     // 注意範圍，domain 有包含還是無包含。 這邊是start無包含end有包含!!所以for loop 要用 <=
-    for (int i = seg_arr[start_idx].start + 1; i <= AUD_LEN; i++)
-        dp[i] = 1;
+    if (count == 0){
+        cout << 0 << " " << AUD_LEN << endl;
+    }
+    else{
+        vector<int> dp(AUD_LEN + 2, 1);
+        sort(seg_arr.begin(), seg_arr.end(), cmp_func);
 
-    Segment m_seg = seg_arr[start_idx];
+        for (int i = 0; i<= seg_arr[0].start; i++)
+            dp[i] = 0;
 
-    // fill dp table and calculate duration of time without any speaker
-    int bias = 0;
-    int front = seg_arr[start_idx].end; // record the biggest "end" encountered.
+        Segment m_seg = seg_arr[0];
 
-    for (int i = 1; i < n; i++) {
-        // ||後面是為了排除 start == end的狀況 e.g. 0 0 or 1 1 or 2 2...
-        if (seg_arr[i].end <= front || seg_arr[i].start == seg_arr[i].end) {
-            bias++;
-            continue;
+        // fill dp table and calculate duration of time without any speaker
+        int bias = 0;
+        int front = seg_arr[0].end; // record the biggest "end" encountered.
+
+        for (int i = 1; i < n; i++) {
+            if (seg_arr[i].end <= front) {
+                bias++;
+                continue;
+            }
+
+            front = max(seg_arr[i].end, front);
+
+            int tmp = dp[seg_arr[i].start] + 1;
+            for (int j = (seg_arr[i - 1 - bias].end) + 1; j <= AUD_LEN; j++)
+                dp[j] = tmp;
+
+            bias = 0;
+            merge(seg_arr[i], m_seg);
         }
 
-        front = max(seg_arr[i].end, front);
-
-        int tmp = dp[seg_arr[i].start] + 1;
-        for (int j = (seg_arr[i - 1 - bias].end) + 1; j <= AUD_LEN; j++)
-            dp[j] = tmp;
-
-        bias = 0;
-        merge(seg_arr[i], m_seg);
+        cout << dp[AUD_LEN] << " " << AUD_LEN - m_seg.time << endl;
     }
-
-    cout << dp[AUD_LEN] << " " << AUD_LEN - m_seg.time << endl;
     return 0;
 }
