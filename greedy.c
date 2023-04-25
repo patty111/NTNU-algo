@@ -1,21 +1,13 @@
-/*
-Problem #484 - Speaker Diarization
-# Greedy (better)
-# DP
-*/
-
 #include <stdio.h>
 #include <stdlib.h>
-#include <stdbool.h>
 
-typedef struct segment{
+typedef struct segment {
     int start;
     int end;
     int time;
-}seg;
+} seg;
 
-
-int cmp_func(const void* a, const void* b){
+int cmp_func(const void* a, const void* b) {
     seg tmpA = *(seg*)a;
     seg tmpB = *(seg*)b;
     if (tmpA.time != tmpB.time)
@@ -24,20 +16,7 @@ int cmp_func(const void* a, const void* b){
         return tmpA.start - tmpB.start;
 }
 
-// merge and return merged segment time. if op = 1 -> merge, if op = 0 -> don't merge, only count merged segment time
-void merge(seg s, seg* m_seg){
-    if (m_seg->end <= s.start){
-        m_seg->time = m_seg->time + s.time;
-        m_seg->end = s.end;
-    }
-    else if (m_seg->end > s.start && m_seg->end < s.end){
-        m_seg->time = m_seg->time + s.time - (m_seg->end - s.start);
-        m_seg->end = s.end;
-    }
-}
-
-
-int main(){
+int main() {
     int n, AUD_LEN;
     scanf("%d %d", &n, &AUD_LEN);
     

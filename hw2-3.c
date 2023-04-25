@@ -38,8 +38,8 @@ int LIS(flight* arr, int len) {
             max_len++;
         }
         else {
-            int idx = binarySearch(dp, -1, max_len-1, arr[i].end); // find the index of the smallest element in tails that is greater than or equal to arr[i]
-            dp[idx] = arr[i].end; // replace tails[idx] with arr[i]
+            int idx = binarySearch(dp, -1, max_len-1, arr[i].end); // find the index of the smallest element in dp that is greater than or equal to arr[i]
+            dp[idx] = arr[i].end; // replace dp[idx] with arr[i]
         }
     }
 
@@ -65,14 +65,6 @@ int main(){
     }
 
     qsort(flights, f, sizeof(flight), cmpfunc);
-    
-
-    // for (int i=0;i<f;i++){
-    //     printf("%d %d\n", flights[i].start, flights[i].end);
-    // }
     printf("%d\n", LIS(flights, f));
-
-
-
     return 0;	
 }
