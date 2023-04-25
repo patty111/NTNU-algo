@@ -30,6 +30,10 @@ void merge(Segment s, Segment& m_seg) {
 }
 
 int main() {
+    // 可以省1/3的時間
+    std::ios_base::sync_with_stdio(false);
+    std::cin.tie(nullptr);
+    
     int n, AUD_LEN;
     cin >> n >> AUD_LEN;
 
@@ -50,10 +54,9 @@ int main() {
         else
             break;
     }
-    
+
     // initializing dp table
-    
-    vector<int> dp(AUD_LEN + 1, 0); // 這行導致RE
+    vector<int> dp(AUD_LEN + 10);
 
     // 注意範圍，domain 有包含還是無包含。 這邊是start無包含end有包含!!所以for loop 要用 <=
     for (int i = seg_arr[start_idx].start + 1; i <= AUD_LEN; i++)
@@ -61,7 +64,7 @@ int main() {
 
     Segment m_seg = seg_arr[start_idx];
 
-    // // fill dp table and calculate duration of time without any speaker
+    // fill dp table and calculate duration of time without any speaker
     int bias = 0;
     int front = seg_arr[start_idx].end; // record the biggest "end" encountered.
 

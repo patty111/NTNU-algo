@@ -10,48 +10,57 @@ typedef struct segment{
 int cmp_func(const void* a, const void* b){
     seg tmpA = *(seg*)a;
     seg tmpB = *(seg*)b;
-    if (tmpA.start != tmpB.start)
-        return tmpA.start - tmpB.start;
+    if (tmpA.time != tmpB.time)
+        return tmpA.time - tmpB.time;
     else
-        return tmpA.end - tmpB.end;
-}
-
-void merge(seg s, seg* m_seg){
-    if (m_seg->end <= s.start){
-        m_seg->time = m_seg->time + s.time;
-        m_seg->end = s.end;
-    }
-    else if (m_seg->end > s.start && m_seg->end < s.end){
-        m_seg->time = m_seg->time + s.time - (m_seg->end - s.start);
-        m_seg->end = s.end;
-    }
+        return tmpA.start - tmpB.start;
 }
 
 
 int main(){
     int n, AUD_LEN;
     scanf("%d %d", &n, &AUD_LEN);
-    seg* seg_arr = (seg*)malloc(sizeof(seg) * (n+1)); 
+    
+    seg* seg_arr = (seg*)malloc(sizeof(seg) * (n+1));
 
-    for (int i=0;i<n;i++){ 
-        scanf("%d %d", &seg_arr[i].start, &seg_arr[i].end); 
-        seg_arr[i].time = seg_arr[i].end - seg_arr[i].start; 
-    } 
+    int count = 0;
+    for (int i=0;i<n;i++){
+        int a, b;
+        scanf("%d %d", &seg_arr[i].start, &seg_arr[i].end);
+        if (a != b){
+            seg_arr[i].start = a;
+            seg_arr[i].end = b;
+            seg_arr[i].time = seg_arr[i].end - seg_arr[i].start;
+            count++;
+        }
+    }
 
-    qsort(seg_arr, n, sizeof(seg), cmp_func); 
 
+    if (count == 0){
+        printf("0 %d\n", AUD_LEN);
+    }
+    else{
+        qsort(seg_arr, count, sizeof(seg), cmp_func);
 
-    int start = 0, end = 0, res = 0, bias = 0; 
-    while (end < AUD_LEN){ 
-        while (end < AUD_LEN && bias < n) 
-            end = seg_arr[bias++].end;  // Expand end pointer 
-        res++; 
-        bias--; 
-        end++;  // Shift end pointer 
-        while (end < AUD_LEN && bias < n) 
-            start = seg_arr[bias++].start;  // Expand start pointer 
-    } 
+        for (int i=0; i<count; i++)
+            printf("%d %d %d\n", seg_arr[i].start, seg_arr[i].end, seg_arr[i].time);
 
-    printf("%d %d\n",res , AUD_LEN - seg_arr[bias-1].end); 
+        int left_seg_start = seg_arr[0].start;
+        int left_seg_end = seg_arr[0].end;
+        int right_seg_start = seg_arr[0].start;
+        int right_seg_end = seg_arr[0].end;
+
+        int inner_seg_count = 0;
+        int* inner_seg_start = (int*)malloc(sizeof(int) * (count + 1));
+        int* inner_seg_end = (int*)malloc(sizeof(int) * (count + 1));
+
+        for (int i=1; i<count; i++){
+
+        }
+
+   
+    // printf("%d %d\n",dp[AUD_LEN] , AUD_LEN - m_seg->time);
+    }
+    
     return 0;
 }
