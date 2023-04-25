@@ -59,29 +59,29 @@ int main() {
     for (int i = seg_arr[start_idx].start + 1; i <= AUD_LEN; i++)
         dp[i] = 1;
 
-    // Segment m_seg = seg_arr[start_idx];
+    Segment m_seg = seg_arr[start_idx];
 
     // // fill dp table and calculate duration of time without any speaker
-    // int bias = 0;
-    // int front = seg_arr[start_idx].end; // record the biggest "end" encountered.
+    int bias = 0;
+    int front = seg_arr[start_idx].end; // record the biggest "end" encountered.
 
-    // for (int i = 1; i < n; i++) {
-    //     // ||後面是為了排除 start == end的狀況 e.g. 0 0 or 1 1 or 2 2...
-    //     if (seg_arr[i].end <= front || seg_arr[i].start == seg_arr[i].end) {
-    //         bias++;
-    //         continue;
-    //     }
+    for (int i = 1; i < n; i++) {
+        // ||後面是為了排除 start == end的狀況 e.g. 0 0 or 1 1 or 2 2...
+        if (seg_arr[i].end <= front || seg_arr[i].start == seg_arr[i].end) {
+            bias++;
+            continue;
+        }
 
-    //     front = max(seg_arr[i].end, front);
+        front = max(seg_arr[i].end, front);
 
-    //     int tmp = dp[seg_arr[i].start] + 1;
-    //     for (int j = (seg_arr[i - 1 - bias].end) + 1; j <= AUD_LEN; j++)
-    //         dp[j] = tmp;
+        int tmp = dp[seg_arr[i].start] + 1;
+        for (int j = (seg_arr[i - 1 - bias].end) + 1; j <= AUD_LEN; j++)
+            dp[j] = tmp;
 
-    //     bias = 0;
-    //     merge(seg_arr[i], m_seg);
-    // }
+        bias = 0;
+        merge(seg_arr[i], m_seg);
+    }
 
-    // cout << dp[AUD_LEN] << " " << AUD_LEN - m_seg.time << endl;
+    cout << dp[AUD_LEN] << " " << AUD_LEN - m_seg.time << endl;
     return 0;
 }
