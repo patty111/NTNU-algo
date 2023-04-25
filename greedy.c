@@ -18,8 +18,8 @@ typedef struct segment{
 int cmp_func(const void* a, const void* b){
     seg tmpA = *(seg*)a;
     seg tmpB = *(seg*)b;
-    if (tmpA.start != tmpB.start)
-        return tmpA.end - tmpB.end;
+    if (tmpA.time != tmpB.time)
+        return tmpA.time - tmpB.time;
     else
         return tmpA.start - tmpB.start;
 }
@@ -43,58 +43,44 @@ int main(){
     
     seg* seg_arr = (seg*)malloc(sizeof(seg) * (n+1));
 
+    int count = 0;
     for (int i=0;i<n;i++){
+        int a, b;
         scanf("%d %d", &seg_arr[i].start, &seg_arr[i].end);
-        seg_arr[i].time = seg_arr[i].end - seg_arr[i].start;
+        if (a != b){
+            seg_arr[i].start = a;
+            seg_arr[i].end = b;
+            seg_arr[i].time = seg_arr[i].end - seg_arr[i].start;
+            count++;
+        }
     }
 
-    qsort(seg_arr, n, sizeof(seg), cmp_func);
-    for (int i=0;i<n;i++)
-        printf("%d %d\n", seg_arr[i].start, seg_arr[i].end);
 
-    // initialize dp table
-
-    // 排除第一個是 start == end的狀況 e.g. 0 0 or 1 1 or 2 2...
-    int start_idx = 0;
-    for (int i=0;i<n;i++){
-        if (seg_arr[i].time == 0 && n != 1)
-            start_idx++;
-        else
-            break;
+    if (count == 0){
+        printf("0 %d\n", AUD_LEN);
     }
-    
-    int* dp = (int*)calloc((AUD_LEN + 1), sizeof(int));    
-        // 注意範圍，domain 有包含還是無包含。 這邊是start無包含end有包含!!所以for loop 要用 <=
-    for (int i=seg_arr[start_idx].start + 1;i<=AUD_LEN;i++)
-        dp[i] = 1;
-    
-    seg* m_seg = (seg*)malloc(sizeof(seg));
-    m_seg->start = seg_arr[start_idx].start;
-    m_seg->end = seg_arr[start_idx].end;
-    m_seg->time = seg_arr[start_idx].time;
+    else{
+        qsort(seg_arr, count, sizeof(seg), cmp_func);
 
-    // fill dp table and calculate duration of time without any speaker
-    int bias = 0;
-    int front = seg_arr[start_idx].end; // record the biggest "end" encountered.
+        for (int i=0; i<count; i++)
+            printf("%d %d %d\n", seg_arr[i].start, seg_arr[i].end, seg_arr[i].time);
 
-    for (int i=1;i<n;i++){
-        //  ||後面是為了排除 start == end的狀況 e.g. 0 0 or 1 1 or 2 2...
-        if (seg_arr[i].end <= front || seg_arr[i].start == seg_arr[i].end){
-            bias++;
-            continue;
+        int left_seg_start = seg_arr[0].start;
+        int left_seg_end = seg_arr[0].end;
+        int right_seg_start = seg_arr[0].start;
+        int right_seg_end = seg_arr[0].end;
+
+        int inner_seg_count = 0;
+        int* inner_seg_start = (int*)malloc(sizeof(int) * (count + 1));
+        int* inner_seg_end = (int*)malloc(sizeof(int) * (count + 1));
+
+        for (int i=1; i<count; i++){
+
         }
 
-        front = seg_arr[i].end > front ? seg_arr[i].end : front;
-        
-        int tmp = dp[seg_arr[i].start] + 1;
-        for (int j=(seg_arr[i-1-bias].end) + 1;j<=AUD_LEN;j++)
-            dp[j] = tmp;
-        
-        bias = 0;
-        merge(seg_arr[i], m_seg);
+   
+    // printf("%d %d\n",dp[AUD_LEN] , AUD_LEN - m_seg->time);
     }
-
-
-    printf("%d %d\n",dp[AUD_LEN] , AUD_LEN - m_seg->time);
+    
     return 0;
 }
