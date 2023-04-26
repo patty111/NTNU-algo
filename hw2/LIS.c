@@ -1,4 +1,4 @@
-// Longest Increasing Subsequence
+// Longest Increasing Subsequence, binary search approach
 
 #include <stdio.h>
 #include <stdlib.h>

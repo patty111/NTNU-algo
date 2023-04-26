@@ -1,3 +1,9 @@
+/*
+    Problem #484 - Speaker Diarization
+    # Greedy (better (?))
+    # DP
+*/
+
 #include <iostream>
 #include <algorithm>
 #include <vector>
