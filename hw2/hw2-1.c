@@ -1,3 +1,8 @@
+/*
+    Problem #481 - Weird Coin
+    Dynamic Programming
+*/
+
 #include <stdio.h>
 #include <math.h>
 #include <stdlib.h>

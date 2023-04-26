@@ -2,7 +2,7 @@
 #include <algorithm>
 #include <vector>
 // using c++ is faster
-// run *.exe < shf.in on mac to test big cases
+// run *.exe < shf.in to test big cases (mac env)
 
 using namespace std;
 
@@ -32,7 +32,7 @@ void merge(Segment s, Segment& m_seg) {
 }
 
 int main() {
-    // 可以省1/3的時間
+    // decrease the delay caused by "cin", can save up to 1/3 of time
     std::ios_base::sync_with_stdio(false);
     std::cin.tie(nullptr);
     

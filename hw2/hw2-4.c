@@ -1,7 +1,7 @@
 /*
-Problem #484 - Speaker Diarization
-# Greedy (better)
-# DP
+    Problem #484 - Speaker Diarization
+    # Greedy (better (?))
+    # DP
 */
 
 #include <stdio.h>
