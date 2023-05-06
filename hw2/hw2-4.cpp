@@ -63,7 +63,7 @@ int main() {
 
     // initializing dp table
 
-    // 注意範圍，domain 有包含還是無包含。 這邊是start無包含end有包含!!所以for loop 要用 <=
+    // 注意範圍，domain 有包含還是無包含。 這邊是start無包含end有包含!! 所以for loop 要用 <=
     if (count == 0){
         cout << 0 << " " << AUD_LEN << endl;
     }
