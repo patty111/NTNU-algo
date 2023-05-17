@@ -1,7 +1,6 @@
 #include <iostream>
 #include <vector>
 #include <algorithm>
-#include <limits>
 using namespace std;
 
 struct Edge {
@@ -105,29 +104,29 @@ int main() {
     // Print the maximum spanning tree
     int bottle_neck = INT_MAX;
     for (const Edge& edge : maxSpanningTree) {
-        cout << edge.u << " " << edge.v << " " << edge.weight << endl;
+        // cout << edge.u << " " << edge.v << " " << edge.weight << endl;
         bottle_neck = min(bottle_neck, edge.weight);
     }
 
-    cout << "bottle neck: " << bottle_neck << endl;
+    // cout << "bottle neck: " << bottle_neck << endl;
 
     // 2nd spanning tree (min)
     sort(edges.begin(), edges.end(), asccmp);
 
-    for (auto i: edges){
-        cout << i.u << " " << i.v << " " << i.weight << endl;
-    }
+    // for (auto i: edges){
+    //     cout << i.u << " " << i.v << " " << i.weight << endl;
+    // }
 
     vector<Edge> newSpanningTree = min_spanning_tree(edges, n, bottle_neck);
     
     // Print the new minimum spanning tree
     int sum = 0;
-    cout << endl << "Minimum spanning tree:" << endl;
+    // cout << endl << "Minimum spanning tree:" << endl;
     for (const Edge& edge : newSpanningTree) {
         sum += edge.weight;
-        cout << edge.u << " " << edge.v << " " << edge.weight << endl;
+        // cout << edge.u << " " << edge.v << " " << edge.weight << endl;
     }
-    cout << "result: " << sum << endl;
+    cout << sum << endl;
 
     return 0;
 }
