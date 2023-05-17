@@ -1,7 +1,15 @@
-#include <iostream>
-#include <vector>
-#include <algorithm>
-#include <limits>
+/*
+    Problem #502 - Budget Cut
+
+    minimum and maximum spanning tree
+
+    2 spanning trees
+    kruskal find max spanning tree
+    the min of the graph is the max bottle neck
+    then from the bottle neck, create a minimum spanning tree
+*/
+
+#include "bits/stdc++.h"
 using namespace std;
 
 struct Edge {
@@ -113,11 +121,6 @@ int main() {
 
     // 2nd spanning tree (min)
     sort(edges.begin(), edges.end(), asccmp);
-
-    for (auto i: edges){
-        cout << i.u << " " << i.v << " " << i.weight << endl;
-    }
-
     vector<Edge> newSpanningTree = min_spanning_tree(edges, n, bottle_neck);
     
     // Print the new minimum spanning tree
