@@ -25,20 +25,25 @@ void printGraph(vector<vector<vertex>> graph){
 
 void DFS(vector<vector<vertex>> graph, int n, bool*& visited, int v, int min_w, vector<int>& result, int end){
     visited[v] = true;
-    cout << v << endl;;
+    // cout << v << endl;
     // cout << min_w << endl;
+    if (v == end){
+        path_w.push_back(min_w);
+        cout << "end: "<< min_w << endl;
+        return;
+    }
 
     for (auto i: graph[v]){
+
+        // cout << "\nvisited: ";
+        // for (int j=0; j<n; j++)
+        //     cout << visited[j] << " ";
+        // cout << endl;
         if(!visited[i.v]){
             min_w = min(min_w, i.weight);
             // result.push_back(min_w);
-            
+            cout << i.v << " "<< end << endl;
             // end of path
-            if (i.v == end){
-                path_w.push_back(min_w);
-                cout << "end: "<< min_w << endl;
-                return;
-            }
             DFS(graph, n, visited, i.v, min_w, result, end);
         }
     }
@@ -60,6 +65,10 @@ int main() {
     cin >> n >> m;
     
     bool* visited = new bool[n];
+    for (int i=0; i<n; i++)
+        visited[i] = false;
+    
+    cout << endl;
     int min_w = INT_MAX;
     
     vector<vector<vertex>> graph(n + 1);  // Graph representation
