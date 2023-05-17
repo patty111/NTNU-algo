@@ -2,6 +2,7 @@
     Problem #503 - Lava
     Flood fill, queue, BFS
 */
+// try binary search to cut time
 #include <iostream>
 #include <vector>
 #include <queue>
