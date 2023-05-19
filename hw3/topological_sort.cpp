@@ -1,88 +1,85 @@
 #include <iostream>
-#include <stack>
-#include <unordered_map>
 #include <vector>
+#include <algorithm>
+#include <queue>
+using namespace std;
 
-class Graph {
-private:
-	std::unordered_map<int, std::vector<int> >
-		graph; // adjacency list
-	int V; // number of vertices
-public:
-	Graph(int vertices)
-		: V(vertices)
-	{
-	}
-
-	// function to add an edge to graph
-	void addEdge(int u, int v) { graph[u].push_back(v); }
-
-	// non-recursive topological sort
-	void nonRecursiveTopologicalSort()
-	{
-		std::vector<bool> visited(
-			V,
-			false); // mark all the vertices as not visited
-		std::stack<int> stack; // result stack
-
-		// call the helper function to store Topological
-		// Sort starting from all vertices one by one
-		for (int i = 0; i < V; i++) {
-			if (!visited[i]) {
-				nonRecursiveTopologicalSortUtil(i, visited,
-												stack);
-			}
-		}
-
-		// print contents of the stack in reverse
-		std::vector<int> sorted;
-		while (!stack.empty()) {
-			sorted.push_back(stack.top());
-			stack.pop();
-		}
-		std::cout << "The following is a Topological Sort "
-					"of the given graph:\n";
-		for (auto& i : sorted) {
-			std::cout << i << " ";
-		}
-		std::cout << std::endl;
-	}
-
-private:
-	// helper function for non-recursive topological sort
-	void nonRecursiveTopologicalSortUtil(
-		int v, std::vector<bool>& visited,
-		std::stack<int>& stack)
-	{
-		visited[v] = true;
-
-		for (auto& next_neighbor : graph[v]) {
-			if (!visited[next_neighbor]) {
-				nonRecursiveTopologicalSortUtil(
-					next_neighbor, visited, stack);
-			}
-		}
-		stack.push(v);
-	}
-};
-
-int main()
-{
-	Graph g(8);
-	g.addEdge(3, 7);
-	g.addEdge(4, 7);
-	g.addEdge(4, 5);
-	g.addEdge(5, 9);
-	g.addEdge(1, 9);
-	g.addEdge(1, 6);
-	g.addEdge(6, 8);
-	g.addEdge(2, 8);
-
-	g.nonRecursiveTopologicalSort();
-	return 0;
+void output(int* v, int n) {
+    for (int i = 0; i < n; ++i)
+        cout << v[i] << " ";
+    cout << endl;
 }
 
+void topologicalSort(vector<pair<int, int>>& graph, int n) {
+
+	// maybe i should check out degree
+    vector<int> indegree(n + 1, 0);
+    vector<vector<int>> adjList(n + 1, vector<int>());
+
+    for (auto& edge : graph) {
+        int u = edge.first;
+        int v = edge.second;
+        adjList[u].push_back(v);
+        indegree[v]++;
+    }
+
+	// print adjList
+	for (int u = 1; u <= n; u++) {
+    cout << "Vertex " << u << " is adjacent to: ";
+    for (int v : adjList[u]) {
+        cout << v << " ";
+    }
+    cout << endl;
+	}
+
+    queue<int> q;
+    for (int i = 1; i <= n; i++) {
+        if (indegree[i] == 0)
+            q.push(i);
+    }
+
+    vector<int> sortedOrder(n, -1);
+	int idx = 0;
+    while (!q.empty()) {
+        int curr = q.front();
+        q.pop();
+        sortedOrder[idx] = curr;
+
+        for (int neighbor : adjList[curr]) {
+            indegree[neighbor]--;
+            if (indegree[neighbor] == 0)
+                q.push(neighbor);
+
+		// output(sortedOrder.data(), n);
+        }
+		++idx;
+    }
+
+    if (sortedOrder.size() != n) {
+        cout << -1 << endl;  // Not a valid topological order
+    } else {
+        output(sortedOrder.data(), n);
+    }
+}
+
+int main() {
+    int n, m;
+    cin >> n >> m;
+    int* shots = new int[n];
+    vector<pair<int, int>> graph;
+
+    cin >> shots[0];
+    for (int i = 1; i < m; ++i) {
+        cin >> shots[i];
+        if (shots[i] > shots[i - 1])
+            graph.push_back({ shots[i - 1], shots[i] });
+		else
+            graph.push_back({ shots[i], shots[i - 1] });
+    }
 
 
+    topologicalSort(graph, n);
 
-
+    delete[] shots;
+    return 0;
+}

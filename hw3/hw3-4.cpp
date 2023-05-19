@@ -6,40 +6,58 @@
 #include <algorithm>
 using namespace std;
 
-void output(vector<int> v){
-    for (auto i: v)
+void output(int* v, int n){
+    for (int i=0; i<n; ++i)
         cout << i << " ";
     cout << endl;
 }
 
 
-void refresh(vector<int>& v, int num, int last){
-    for (int i=num; i<v.size(); ++i){
-        v[i] = last+1;
-    }
+void DFS(int i, int*& visited, vector<int>& nodes, vector<pair<int, int>>& graph){
+    visited[i] = 1;
+    
 }
+
+
+int* topological_sort(vector<pair<int, int>> graph, int node_num){
+    
+    int* visited = new int[node_num, 0];
+    int* result = new int[node_num, 0];
+    int idx = node_num - 1;
+
+    for (int i=0; i<node_num; ++i){
+        if (visited[i] == 0){
+            vector<int> nodes;
+            
+            DFS(i, visited, nodes, graph);
+            for (auto i: nodes){
+                result[idx] = i;
+                i--;
+            }
+        }
+    }
+    return result;
+}
+
 
 
 
 int main(){
     int n, m;
     cin >> n >> m;
-    vector <int> shots(n);
-    vector <int> result(n, 0);
-    for (int i=0; i<m; ++i)
-        cin >> shots[i];
-    
-    for (int i=0; i<shots[0]; ++i)
-        result[i] = 1;
+    int* shots =  new int[n];
+    vector<pair<int, int>> graph(m-1);
 
-    int last = shots[0];
-    for (int i=1; i<shots.size(); ++i){
-        if (shots[i] > last){
-
-        }
+    cin >> shots[0];
+    for (int i=1; i<m; ++i){
+        cin >> shots[i]; 
+        if (shots[i] > shots[i-1])
+            graph.push_back({shots[i-1], shots[i]});
+        else
+            graph.push_back({shots[i], shots[i-1]});
     }
     
-    output(result);
+
 
 
 
