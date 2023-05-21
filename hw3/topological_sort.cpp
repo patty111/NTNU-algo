@@ -4,82 +4,74 @@
 #include <queue>
 using namespace std;
 
-void output(int* v, int n) {
-    for (int i = 0; i < n; ++i)
-        cout << v[i] << " ";
-    cout << endl;
-}
-
-void topologicalSort(vector<pair<int, int>>& graph, int n) {
-
-	// maybe i should check out degree
+void topologicalSort(vector<vector<int>>& adjList, int n) {
     vector<int> indegree(n + 1, 0);
-    vector<vector<int>> adjList(n + 1, vector<int>());
+    vector<int> result; // to store the topological order
 
-    for (auto& edge : graph) {
-        int u = edge.first;
-        int v = edge.second;
-        adjList[u].push_back(v);
-        indegree[v]++;
+    // Step 1: Compute the indegree and adjacency list
+    for (int i=0; i<adjList.size(); ++i){
+        for (int j=0; j<adjList[i].size(); ++j){
+            int u = i;
+            int v = adjList[i][j];
+
+            indegree[v]++;
+        }
     }
-
-	// print adjList
-	for (int u = 1; u <= n; u++) {
-    cout << "Vertex " << u << " is adjacent to: ";
-    for (int v : adjList[u]) {
-        cout << v << " ";
+    for (auto i: indegree){
+        cout << i << " ";
     }
     cout << endl;
-	}
 
+    // Step 2: Create a queue and enqueue vertices with indegree 0
     queue<int> q;
     for (int i = 1; i <= n; i++) {
+        // if (adjList[i].size() == 0)   
+        //     continue;
         if (indegree[i] == 0)
             q.push(i);
     }
 
-    vector<int> sortedOrder(n, -1);
-	int idx = 0;
+    // Step 3: Perform topological sorting
     while (!q.empty()) {
-        int curr = q.front();
+        int u = q.front();
         q.pop();
-        sortedOrder[idx] = curr;
+        result.push_back(u);
 
-        for (int neighbor : adjList[curr]) {
-            indegree[neighbor]--;
-            if (indegree[neighbor] == 0)
-                q.push(neighbor);
-
-		// output(sortedOrder.data(), n);
+        // Decrease the indegree of u's neighbors
+        for (int v : adjList[u]) {
+            indegree[v]--;
+            if (indegree[v] == 0)
+                q.push(v);
         }
-		++idx;
     }
 
-    if (sortedOrder.size() != n) {
-        cout << -1 << endl;  // Not a valid topological order
-    } else {
-        output(sortedOrder.data(), n);
-    }
+    // Print the topological order
+    for (int i : result)
+        cout << i << " ";
+    cout << endl;
 }
 
 int main() {
+    std::ios_base::sync_with_stdio(false);
+    std::cin.tie(nullptr);
     int n, m;
     cin >> n >> m;
-    int* shots = new int[n];
-    vector<pair<int, int>> graph;
+    // vector<pair<int, int>> graph;
+    vector<vector<int>> adjList(n + 1);
 
-    cin >> shots[0];
+
+    int prev, curr;
+    cin >> prev;
     for (int i = 1; i < m; ++i) {
-        cin >> shots[i];
-        if (shots[i] > shots[i - 1])
-            graph.push_back({ shots[i - 1], shots[i] });
-		else
-            graph.push_back({ shots[i], shots[i - 1] });
+        cin >> curr;
+        if (curr > prev)
+            adjList[prev].push_back(curr);
+        else
+            adjList[curr].push_back(prev);
+        prev = curr;
     }
 
+    topologicalSort(adjList, n);
 
-    topologicalSort(graph, n);
-
-    delete[] shots;
     return 0;
 }

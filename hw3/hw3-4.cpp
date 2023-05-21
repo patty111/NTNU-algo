@@ -1,68 +1,59 @@
 /*
     Problem #504 - Corgi-Ball
+    // Topological sort
+    
+    #1 create adjList: 反向箭頭 in ascending
+    ex: 3 7 4 5 9 1 6 8 2 -> 3->7 /->4 ->5->9/ ->1->6->8 /->2
+                             ㇗㇘    ㇗-----㇘    ㇗---㇘
+    #2 remove horizontal arrows, count remove how many the graph will be a DAG
 */
+
 #include <iostream>
-#include <vector>
 #include <algorithm>
+#include <vector>
 using namespace std;
 
-void output(int* v, int n){
-    for (int i=0; i<n; ++i)
-        cout << i << " ";
-    cout << endl;
-}
+int ansCount(int n, vector<vector<int>>& adjList) {
+    int count = 0;
+    int start = 0;
 
+    for (int curr=1; curr<n; curr++){
+        for (auto i: adjList[curr]){
+            if (i < start) 
+                continue;
 
-void DFS(int i, int*& visited, vector<int>& nodes, vector<pair<int, int>>& graph){
-    visited[i] = 1;
-    
-}
-
-
-int* topological_sort(vector<pair<int, int>> graph, int node_num){
-    
-    int* visited = new int[node_num, 0];
-    int* result = new int[node_num, 0];
-    int idx = node_num - 1;
-
-    for (int i=0; i<node_num; ++i){
-        if (visited[i] == 0){
-            vector<int> nodes;
-            
-            DFS(i, visited, nodes, graph);
-            for (auto i: nodes){
-                result[idx] = i;
-                i--;
-            }
+            start = curr;
+            count++;
+            break;
         }
     }
-    return result;
+    return count;
 }
 
+int main() {
+    ios_base::sync_with_stdio(false);
+    cin.tie(nullptr);
 
-
-
-int main(){
     int n, m;
     cin >> n >> m;
-    int* shots =  new int[n];
-    vector<pair<int, int>> graph(m-1);
 
-    cin >> shots[0];
-    for (int i=1; i<m; ++i){
-        cin >> shots[i]; 
-        if (shots[i] > shots[i-1])
-            graph.push_back({shots[i-1], shots[i]});
+    vector<vector<int>> adjList(n + 1);
+
+    int prev, curr;
+    cin >> prev;
+    prev--;
+
+    for (int i=1; i<m; ++i) {
+        cin >> curr;
+        curr--;
+
+        if (curr > prev)
+            adjList[curr].push_back(prev);
         else
-            graph.push_back({shots[i], shots[i-1]});
+            adjList[prev].push_back(curr);
+        prev = curr;
     }
-    
 
-
-
-
+    cout << ansCount(n, adjList) + 1 << endl;
     return 0;
 }
-// 先建圖
-// Dfs and BFS 附近但不是這兩個 -> topological sort
-// 
