@@ -3,3 +3,4 @@
 *.txt
 a.*
 .vscode
+.DS_Store
