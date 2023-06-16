@@ -66,6 +66,9 @@ int edmonds_karp(int** G, int n, int s, int t) {
 }
 
 int main(){
+    std::ios_base::sync_with_stdio(false);
+    std::cin.tie(nullptr);
+
     int n;  // number of police stations
     cin >> n;
     int** G = new int*[n*2+2];

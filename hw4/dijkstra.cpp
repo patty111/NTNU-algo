@@ -48,13 +48,7 @@ vector<int> dijkstra(vector<vector<pair<int, int>>> &G, int vertexCount, int src
             }
         }
     }
-    // debug use
-    // for (int i=0; i<G.size(); ++i){
-    //             cout << dist[i] << " ";
-    //         }
-    //         cout << endl;
 
-    // return vertex in shortest path
     set<int> appear;
     vector<int> path;
     for (auto i: path_record){
@@ -64,6 +58,7 @@ vector<int> dijkstra(vector<vector<pair<int, int>>> &G, int vertexCount, int src
         }
     }
     return path;
+
 }
 
 
@@ -71,10 +66,11 @@ vector<int> dijkstra(vector<vector<pair<int, int>>> &G, int vertexCount, int src
 int main(){
     int n, m;
     cin >> n >> m;
-    vector<vector<pair<int,int> > > G(n);   // vertex, weight
+    vector<vector<pair<int,int> > > G(n);
     vector<vector<int>> passing_v;
 
     for (int i=0; i<m; ++i){
+        G.push_back(vector<pair<int, int> >());
         int a, b, w;
         cin >> a >> b >> w;
         a--;b--;
@@ -82,33 +78,18 @@ int main(){
         G[b].push_back(make_pair(a, w));
     }
 
-    vector<int> final_path;
-    int shortest_len = INT32_MAX;
-    int idx=0;
+    int* dist = new int[n+1];
 
-    for (int i=0; i<G.size(); ++i){
-        int result = INT32_MAX;
-        for (int j=0; j<G[i].size(); ++j){
-            int tmp = G[i][j].second;
-            G[i][j].second = 0;
-        
-            int* dist = new int[n];
-            
-            vector<int> result = dijkstra(G, n, 0, dist, n-1, passing_v);
 
-            if (shortest_len > dist[n-1]){
-                final_path.pop_back();
-                final_path = result;
-                shortest_len = dist[n-1];
-                idx++;
-            }
-            else if (shortest_len == dist[n-1])
-                final_path = final_path.size() > result.size() ? final_path : result;
 
-            G[i][j].second = tmp;
-        }
+    vector<int> ans = dijkstra(G, n, 0, dist, n-1, passing_v);
+
+    cout << "Shortest distance from vertex 1 to vertex " << n << " is " << dist[n-1] << endl;
+
+    for (auto i: ans){
+        cout << i << " ";
     }
+    
 
-    cout << shortest_len << " " << final_path.size() - 1 << endl;
     return 0;
 }
